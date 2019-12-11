@@ -6,6 +6,8 @@ use Laradex\Trainer;
 
 use Illuminate\Http\Request;
 
+use Laradex\Http\Requests\StoreTrainerRequest;
+
 class TrainerController extends Controller
 {
     /**
@@ -35,8 +37,10 @@ class TrainerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTrainerRequest $request)
     {   
+       
+
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');
             $name = time().$file->getClientOriginalName();
@@ -48,9 +52,11 @@ class TrainerController extends Controller
         $trainer = new Trainer();
         $trainer->name = $request->input('name');
         $trainer->description = $request->input('description');
+        $trainer->slug = $request->input('slug');
         $trainer->avatar = $name;
         $trainer->save();
-        return ('Guardado');
+        return redirect()->route('trainer.index');
+     //   return ('Guardado');
 
     }
 
@@ -90,6 +96,13 @@ class TrainerController extends Controller
      */
     public function update(Request $request,Trainer $trainer)
     {
+      /* $validateData = $request->validate([
+            'name' => 'required|max:10',
+            'description' => 'min:10',
+            'avatar' => 'required|image',
+            'slug' => 'required'
+
+        ]);*/
         $trainer->fill($request->except('avatar'));
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');
@@ -98,7 +111,8 @@ class TrainerController extends Controller
             $file->move(public_path().'/images/',$name);
         }
         $trainer->save();
-        return 'Actualizado';  
+       // return 'Actualizado'; 
+       return redirect()->route('trainer.show', [$trainer])->with('status', 'Registro actualizado'); 
     }
 
     /**
@@ -107,8 +121,13 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Trainer $trainer)
     {
-        //
+        $file_path = public_path().'/images/'.$trainer->avatar;
+        //return $file_path; 
+        \File::delete($file_path);
+
+        $trainer->delete();
+          return redirect()->route('trainer.index'); 
     }
 }
