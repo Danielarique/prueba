@@ -28,3 +28,8 @@ Route::get('/mi_primera_ruta', function () {
 });
 
 Route::resource('trainer', 'TrainerController');
+Route::resource('pokemons', 'PokemonController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
