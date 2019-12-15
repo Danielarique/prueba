@@ -29,7 +29,7 @@
 </template>
 
 <script>
-	import EventBus from '../event-bus.js';
+	import EventBus from '../../event-bus.js';
 	export default{
 		data(){
 			return {
@@ -39,7 +39,10 @@
 		},
 		methods:{
 			savePokemon: function(){
-				axios.post('http://127.0.0.1:8000/pokemons',{
+
+				let currentRoute = window.location.pathname
+				 
+				axios.post(`http://127.0.0.1:8000${currentRoute}/pokemons`,{
 					name: this.name,
 					picture: this.picture
 				})
@@ -53,7 +56,7 @@
 					console.log(err)
 				})
 				//console.log(this.name)
-				//console.log(this.picture)
+				//console.log(this.picture) 
 			}
 		}
 

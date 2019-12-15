@@ -13,8 +13,13 @@ class Trainer extends Model
  *
  * @return string
  */
-public function getRouteKeyName()
-{
-    return 'slug';
-}
+	public function getRouteKeyName()
+	{
+	    return 'slug';
+	}
+
+	public function pokemons()
+	    {
+	        return $this->hasMany('Laradex\Pokemon');
+	    }
 }

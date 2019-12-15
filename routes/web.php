@@ -28,7 +28,9 @@ Route::get('/mi_primera_ruta', function () {
 });
 
 Route::resource('trainer', 'TrainerController');
-Route::resource('pokemons', 'PokemonController');
+//Route::resource('pokemons', 'PokemonController');
+Route::get('trainer/{trainer}/pokemons','PokemonController@index');
+Route::post('trainer/{trainer}/pokemons','PokemonController@store');
 
 Auth::routes();
 
